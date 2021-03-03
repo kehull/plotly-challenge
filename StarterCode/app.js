@@ -1,5 +1,55 @@
+//initialize page with populated charts
+function init() {
+  var barPlot = [{
+    type: 'bar',
+    x: [24, 27, 28, 37, 40, 84, 92, 162, 178, 194],
+    y: ["OTU 1977", "OTU 2318", "OTU 189", "OTU 352", "OTU 1189", "OTU 41", "OTU 2264", "OTU 482", "OTU 2859", "OTU 1167"],
+    orientation: 'h',
+    text: ["Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Porphyromonadaceae;Porphyromonas", "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI;Peptoniphilus", "Bacteria", "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI", "Bacteria", "Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Porphyromonadaceae;Porphyromonas", "Bacteria", "Bacteria", "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI;Anaerococcus", "Bacteria;Firmicutes;Clostridia;Clostridiales"]
+  }];
+
+  Plotly.newPlot('bar', barPlot);
+
+  var bubblePlot = {
+    x:  [1977, 2318, 189, 352, 1189, 41, 2264, 482, 2859, 1167],
+    y: [24, 27, 28, 37, 40, 84, 92, 162, 178, 194],
+    mode: 'markers',
+    text: ["Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Porphyromonadaceae;Porphyromonas", "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI;Peptoniphilus", "Bacteria", "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI", "Bacteria", "Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Porphyromonadaceae;Porphyromonas", "Bacteria", "Bacteria", "Bacteria;Firmicutes;Clostridia;Clostridiales;IncertaeSedisXI;Anaerococcus", "Bacteria;Firmicutes;Clostridia;Clostridiales"],
+    marker: {
+      color:  [1977, 2318, 189, 352, 1189, 41, 2264, 482, 2859, 1167],
+      opacity: [1, 0.8, 0.6, 0.4],
+      size: [24, 27, 28, 37, 40, 84, 92, 162, 178, 194]
+    }
+  };
+  var bubbleData = [bubblePlot];
+  var layout = {
+    showlegend: false,
+    height: 600,
+    width: 1200
+  };
+  Plotly.newPlot("bubble", bubbleData, layout);
+
+var metadataInfo = {
+  age: 34,
+  bbtype: "I",
+  ethnicity: "Caucasian/Midleastern",
+  gender: "F",
+  id: 941,
+  location: "Chicago/IL",
+  wfreq: 1,
+}
+const metadataArrays = Object.entries(metadataInfo);
+  var ul = document.createElement('ul');
+  document.getElementById('sample-metadata').appendChild(ul);
+  ul.innerHTML = "";
+  metadataArrays.forEach(function(keyValuePair) {
+    var li = document.createElement('li');
+    ul.appendChild(li);
+    li.innerHTML += keyValuePair;
+  });
+}
+
 // Use D3 fetch to read the JSON file
-// The data from the JSON file is arbitrarily named importedData as the argument
 var data = {};
 d3.json("samples.json").then((importedData) => {
   data = importedData;
@@ -31,7 +81,7 @@ function optionChanged() {
   var plotData = data.samples.find(findSubject);
 
   // show metadata for subject
-  // @@@ TDL: figure out why this doesn't work ??
+  // this logs twice and doesn't clear on change for some reason?
   function findMeta(meta) {
     return meta.id === parseInt(dataset);
   }
@@ -68,6 +118,7 @@ function optionChanged() {
 
   // call bubble plot
   function createBubbleChart() {
+
     var dropdownMenu = d3.select("#selDataset");
     // Assign the value of the dropdown menu option to a variable
     var dataset = dropdownMenu.node().value; // this is a number
@@ -89,8 +140,9 @@ function optionChanged() {
       height: 600,
       width: 1200
     };
-    Plotly.newPlot("bubble", bubbleData, layout);;
+    Plotly.newPlot("bubble", bubbleData, layout);
   }
   createBubbleChart();
-  // create gauge (maybe)
 }
+
+init();
