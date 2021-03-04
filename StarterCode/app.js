@@ -87,9 +87,10 @@ function optionChanged() {
   }
   var metadataInfo = data.metadata.find(findMeta);
   const metadataArrays = Object.entries(metadataInfo);
+  document.getElementById('sample-metadata').innerHTML = ""
   var ul = document.createElement('ul');
   document.getElementById('sample-metadata').appendChild(ul);
-  ul.innerHTML = "";
+  // ul.innerHTML = "";
   metadataArrays.forEach(function(keyValuePair) {
     var li = document.createElement('li');
     ul.appendChild(li);
